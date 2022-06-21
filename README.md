@@ -38,6 +38,7 @@ python3 generate_outputs_gpt2.py --model_path $OUTPUT_DIR --checkpoint $CHECKPOI
 the system will generate a file `outputs.txt` in the current directory.
 
 ## Results:
+* results are obtained on the e2e test set
 ### GPT2:
 SCORES:
 
