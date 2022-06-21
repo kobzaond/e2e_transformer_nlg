@@ -6,7 +6,8 @@ This repo contains two scripts - one to train the GPT2 and one to train the T5 m
 According to the automatic metrics considered in the E2E challenge
 
 ## Generating outputs:
-This repo contains two scripts for output generation, each for T5 or GPT2
+This repo contains two scripts for output generation, each for T5 or GPT2.
+Both scripts use beam search
 
 ## Usage:
 ```
@@ -39,7 +40,7 @@ the system will generate a file `outputs.txt` in the current directory.
 ## Results:
 ### GPT2:
 SCORES:
-==============
+
 BLEU: 0.6768
 NIST: 8.6796
 METEOR: 0.4595
@@ -48,7 +49,7 @@ CIDEr: 2.3878
 
 ### T5-base:
 SCORES:
-==============
+
 BLEU: 0.6421
 NIST: 8.1828
 METEOR: 0.4576

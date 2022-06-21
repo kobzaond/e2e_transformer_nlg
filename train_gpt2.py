@@ -9,13 +9,18 @@ if __name__=='__main__':
     parser.add_argument("--output_dir", type=str, required=True, help="Directory where to save the model.")
     args = parser.parse_args()
 
+    # load data
     reporting_enabled = True
     data = load_dataset('e2e_nlg')
+
     tokenizer = AutoTokenizer.from_pretrained('gpt2')
+    # add special token: separator between MR and a corresponding human ref.
     tokenizer.SPECIAL_TOKENS_ATTRIBUTES.append('reference_tag')
     tokenizer.add_special_tokens({'reference_tag':"<ref:>"})
     tokenizer._reference_tag = '<ref>:'
     tokenizer.pad_token = tokenizer.eos_token
+
+    # tokenize data
     data=data.map(
         lambda x : tokenizer(
             list(
@@ -25,6 +30,7 @@ if __name__=='__main__':
                     )
     data = data.map(lambda x: {'labels':x['input_ids']})
     
+    # load T5-base model, resize embeddings
     model = GPT2LMHeadModel.from_pretrained('gpt2')
     model.resize_token_embeddings(len(tokenizer))
 
@@ -44,6 +50,7 @@ if __name__=='__main__':
         report_to=None
     )
 
+    # fine-tune the model; the evaluation metric is the eval loss
     trainer = Trainer(
             model=model, args=training_args, train_dataset=data['train'], eval_dataset=data['validation'],
         )

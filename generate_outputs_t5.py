@@ -12,9 +12,12 @@ if __name__=='__main__':
     parser.add_argument("--checkpoint", type=str, required=True, help="Model checkpoint.")
     args = parser.parse_args()
 
+    #load model
     tokenizer = AutoTokenizer.from_pretrained(args.output_dir)
     tokenizer.pad_token = tokenizer.eos_token
     model = T5ForConditionalGeneration.from_pretrained(args.output_dir+'/'+args.checkpoint).to(device)
+
+    #load input data
     f = open('test_mrs.txt', 'r+')
     ls = f.readlines()
     f.close()
