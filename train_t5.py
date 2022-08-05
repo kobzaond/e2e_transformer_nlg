@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import torch
 
 
-def tokenizer_helper(tokenizer, mrs, references):
+def tokenizer_helper(tokenizer: AutoTokenizer, mrs: List[str], references: List[str]) -> Dict[str, torch.Tensor]:
     dictic = {}
     inputs = tokenizer(list(
                 map(

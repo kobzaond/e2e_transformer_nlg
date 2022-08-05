@@ -2,6 +2,7 @@ from datasets import ClassLabel, load_dataset, Value
 from transformers import AutoTokenizer, T5ForConditionalGeneration
 import torch
 import argparse
+from utils import load_input_data, save_output, generate
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -18,23 +19,8 @@ if __name__=='__main__':
     model = T5ForConditionalGeneration.from_pretrained(args.output_dir+'/'+args.checkpoint).to(device)
 
     #load input data
-    f = open('test_mrs.txt', 'r+')
-    ls = f.readlines()
-    f.close()
-    outputs= []
-    for i in range(len(ls)):
-        ls[i] = ls[i].replace('\n','')
-        txt = ls[i] + " <ref:> "
-        inputs = tokenizer(txt, return_tensors='pt').to(device)
+    test_data = load_input_data
 
-        o=model.generate(
-            **inputs, 
-            num_beams=10, 
-            length_penalty=2, 
-            max_length=512)
-        output_text = tokenizer.decode(o[0], skip_special_tokens=True)
-        outputs.append(output_text+'\n')
+    outputs = [generate(model, tokenizer, sample) for sample in test_data] 
 
-    f = open('outputs.txt','w')
-    f.writelines(outputs)
-    f.close()
+    save_output('outputs.txt', outputs)
